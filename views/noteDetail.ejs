@@ -1,0 +1,19 @@
+<section class="note-detail">
+  <div class="container note-detail__container">
+    <div class="note-detail__header">
+      <a href="/notes" class="btn sm primary">Back</a>
+
+      <p class="note-detail__date">
+        Noted at: <%= note.createdAt.toDateString() %>
+      </p>
+
+      <div class="note-detail_buttons">
+        <a href="/notes/<%= note.id %>/edit" class="btn sm primary">Edit</a>
+        <a href="/notes/<%= note.id %>/delete" class="btn sm danger">Delete</a>
+      </div>
+    </div>
+    <h1><%= note.title %></h1>
+
+    <p class="note-detail__content"><%- note.content %></p>
+  </div>
+</section>
