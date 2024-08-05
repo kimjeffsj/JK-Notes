@@ -41,6 +41,12 @@ body {
   color: var(--primary-color);
 }
 
+textarea {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
 a {
   color: var(--primary-color);
   text-decoration: none;
@@ -299,7 +305,12 @@ footer {
 }
 
 .note-detail .note-detail__content {
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.6rem;
+}
+
+/* EDIT NOTE */
+.edit-note__form {
+  margin-top: 0.6rem;
 }
 
 /* REGISTER */
@@ -327,6 +338,11 @@ textarea {
   display: block;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  display: none;
+}
+
+.create-note__form {
+  margin-top: 0.6rem;
 }
 
 .register,
@@ -337,6 +353,10 @@ textarea {
   height: calc(100vh - 12rem);
   display: grid;
   place-items: center;
+}
+
+.create-note input {
+  font-size: 1rem;
 }
 
 .register h2,

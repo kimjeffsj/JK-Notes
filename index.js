@@ -3,6 +3,7 @@ require("dotenv").config();
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 const path = require("path");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -14,10 +15,12 @@ mongoose
   .catch((err) => console.log(err));
 
 // Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(expressLayouts);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname + "/views/"));
-
 app.use(express.static(path.join(__dirname + "/public")));
 
 // Routes

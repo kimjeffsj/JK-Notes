@@ -1,25 +1,10 @@
 <section class="login">
   <div class="container">
     <h2>Sign In</h2>
-    <form
-      action="/login"
-      method="POST"
-      class="form register__form"
-      id="loginForm"
-    >
-      <p
-        class="form__error-message"
-        id="errorMessage"
-        style="display: none"
-      ></p>
-      <input type="text" placeholder="Email" name="email" id="email" required />
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        id="password"
-        required
-      />
+    <form action="/login" method="POST" class="form login__form">
+      <p class="form__error-message"></p>
+      <input type="text" placeholder="Email" name="email" required />
+      <input type="password" placeholder="Password" name="password" required />
       <button type="submit" class="btn primary">Login</button>
     </form>
     <small>

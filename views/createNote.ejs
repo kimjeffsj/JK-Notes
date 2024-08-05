@@ -1,0 +1,18 @@
+<section class="create-note">
+  <div class="container">
+    <h2>Create Note</h2>
+
+    <form action="/create" method="POST" class="form create-note__form">
+      <input type="text" placeholder="Title" name="title" required />
+      <textarea
+        name="content"
+        placeholder="Type your note"
+        rows="15"
+        value="content"
+        required
+      ></textarea>
+
+      <button type="submit" class="btn primary">Create</button>
+    </form>
+  </div>
+</section>

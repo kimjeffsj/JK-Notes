@@ -10,13 +10,22 @@
         <p><%= note.content %></p>
 
         <p class="note__footer-date">
-          Created at: <%= note.createdAt.toDateString() %>
+          Created: <%= note.createdAt.toLocaleDateString() %><%
+          if(note.updatedAt.toDateString() !== note.createdAt.toDateString()) {
+          %>
+          <br />Updated: <%= note.updatedAt.toLocaleDateString() %> <% } %>
         </p>
       </div>
     </article>
     <% }); %>
   </div>
   <% } else { %>
-  <h2 class="center">Write your first note : )</h2>
+  <div class="index__container">
+    <h2 class="center">
+      There is no note. <br /><br />
+      Write your first note : )
+    </h2>
+    <a href="/create" class="btn primary">Create Note</a>
+  </div>
   <% } %>
 </section>
