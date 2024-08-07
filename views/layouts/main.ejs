@@ -17,7 +17,7 @@
   <body>
     <!-- NAVBAR PARTIALS -->
 
-    <nav><%- include ("../partials/header.ejs") %></nav>
+    <nav><%- include ("../partials/header.ejs", {user: locals.user}) %></nav>
 
     <!-- BODY CONTENTS -->
     <%- body %>

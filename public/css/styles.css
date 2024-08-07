@@ -140,10 +140,6 @@ section {
   width: 100%;
 }
 
-.error-page h2 {
-  margin-top: 3rem;
-}
-
 /* NAVBAR */
 
 nav {
@@ -260,19 +256,6 @@ footer {
   margin-top: 1rem;
 }
 
-.note__author {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.note__author-avatar {
-  width: 2.5rem;
-  aspect-ratio: 1/1;
-  border-radius: var(--radius-06);
-  overflow: hidden;
-}
-
 /* SINGLE NOTE */
 .note-detail {
   width: var(--form-width);
@@ -283,6 +266,7 @@ footer {
 
 .note-detail h1 {
   margin-bottom: 1.5rem;
+  overflow: hidden;
 }
 
 .note-detail__header {
@@ -308,6 +292,32 @@ footer {
   margin-bottom: 0.6rem;
 }
 
+.note-detail__alert {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.note-detail__alert aside {
+  width: 35%;
+  text-align: center;
+  background-color: var(--white-color);
+  padding: 20px;
+  border-radius: var(--radius-1);
+}
+
+.note-detail button {
+  padding: 0.5rem 1rem;
+}
+
 /* EDIT NOTE */
 .edit-note__form {
   margin-top: 0.6rem;
@@ -321,7 +331,6 @@ footer {
 }
 
 input,
-select,
 textarea {
   width: 100%;
   padding: 0.6rem 1rem;
@@ -340,6 +349,8 @@ textarea {
   margin-bottom: 1rem;
   display: none;
 }
+
+/* CREATE NOTE */
 
 .create-note__form {
   margin-top: 0.6rem;
@@ -387,50 +398,6 @@ textarea {
   width: 100%;
 }
 
-.avatar__wrapper {
-  width: 15rem;
-  aspect-ratio: 1/1;
-  position: relative;
-  margin-inline: auto;
-  margin-top: 1rem;
-}
-
-.profile__avatar {
-  height: 100%;
-  border-radius: 50%;
-  border: 1rem solid var(--white-color);
-  overflow: hidden;
-}
-
-.avatar__form {
-  height: 1rem;
-}
-
-.avatar__form input {
-  visibility: hidden;
-}
-
-.avatar__form label,
-.profile__avatar-btn {
-  background: var(--primary-color-2);
-  color: var(--white-color);
-  font-size: 1.3rem;
-  position: absolute;
-  right: 2rem;
-  bottom: 1.4rem;
-  width: 3rem;
-  height: 3rem;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-}
-
-.profile__avatar-btn {
-  cursor: pointer;
-  padding: 0;
-  background: var(--primary-color);
-}
-
 .profile__details h1 {
   margin-top: 1.5rem;
 }
@@ -465,11 +432,16 @@ textarea {
   }
 
   .nav__menu {
+    display: none;
     position: absolute;
     top: 5rem;
     right: 0;
     flex-direction: column;
     gap: 0;
+  }
+
+  .nav__menu.active {
+    display: flex;
   }
 
   .nav__menu li {
@@ -525,6 +497,14 @@ textarea {
     width: 100%;
     background: transparent;
     padding: 0;
+  }
+
+  .note-detail__alert aside {
+    width: 80%;
+  }
+
+  .notes__container {
+    overflow: scroll;
   }
 
   .register,

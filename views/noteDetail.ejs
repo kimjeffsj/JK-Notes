@@ -3,16 +3,25 @@
     <div class="note-detail__header">
       <a href="/notes" class="btn sm primary">Back to Notes</a>
       <p class="note-detail__date">
-        <% if(note.updatedAt.toDateString() !== note.createdAt.toDateString())
-        {%> Updated at: <%= note.updatedAt.toLocaleDateString() %> <% } else {
-        %> Created at: <%= note.createdAt.toLocaleDateString() %> <% } %>
+        <% if(note.updatedAt.toDateString()) {%> Updated at: <%=
+        note.updatedAt.toLocaleDateString() %> <% } else { %> Created at: <%=
+        note.createdAt.toLocaleDateString() %> <% } %>
       </p>
       <div class="note-detail__buttons">
         <a href="/notes/<%= note._id %>/edit" class="btn sm primary">Edit</a>
-        <a href="/notes/<%= note._id %>/delete" class="btn sm danger">Delete</a>
+        <a class="deletePopup btn sm danger">Delete</a>
       </div>
     </div>
     <h1><%= note.title %></h1>
     <p class="note-detail__content"><%= note.content %></p>
   </div>
 </section>
+
+<div class="note-detail__alert">
+  <aside>
+    <h2>Are you sure you want to <font color="red">delete</font> this note?</h2>
+    <p>This is final and you will be unable to undo this action.</p>
+    <button class="deleteBtn btn danger">Delete</button>
+    <button class="cancelBtn btn primary">Cancel</button>
+  </aside>
+</div>

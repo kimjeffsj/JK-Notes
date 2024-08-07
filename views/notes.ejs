@@ -1,19 +1,21 @@
 <section>
   <% if (notes.length > 0) { %>
   <div class="container notes__container">
-    <% notes.forEach(function(note) { %>
+    <% notes.forEach(function(note) { %> <% const title = note.title.length > 30
+    ? note.title.substr(0, 30) + "..." : note.title; %> <% const content =
+    note.content.length > 145 ? note.content.substr(0, 145) + "..." :
+    note.content; %>
     <article class="note">
       <div class="note__content">
         <a href="/notes/<%= note._id %>">
-          <h3><%= note.title %></h3>
+          <h3><%= title %></h3>
         </a>
-        <p><%= note.content %></p>
+        <a href="/notes/<%= note._id %>"><p><%= content %></p></a>
 
         <p class="note__footer-date">
           Created: <%= note.createdAt.toLocaleDateString() %><%
-          if(note.updatedAt.toDateString() !== note.createdAt.toDateString()) {
-          %>
-          <br />Updated: <%= note.updatedAt.toLocaleDateString() %> <% } %>
+          if(note.updatedAt.getTime() !== note.createdAt.getTime()) { %>
+          <br />Updated: <%= note.updatedAt.toLocaleDateString() %><% } %>
         </p>
       </div>
     </article>

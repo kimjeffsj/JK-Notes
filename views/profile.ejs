@@ -1,42 +1,45 @@
 <section class="profile">
   <div class="container profile__container">
-    <href a="/notes" class="btn"> My notes </href>
     <div class="profile__details">
-      <!-- <div class="avatar__wrapper"> -->
-      <!-- <div class="profile__avatar">
-          <img src="/img/avatar.png" alt="" />
-        </div> -->
-      <!-- EDIT AVATAR -->
-      <!-- <form class="avatar__form">
-          <input type="file" name="avatar" id="avatar" />
-          <label htmlFor="avatar">
-            <FaRegEdit />
-          </label>
-        </form> -->
-      <!-- <button class="profile__avatar-btn">
-          <FaCheck />
-        </button>
-      </div> -->
+      <h1><%= user.name %></h1>
 
-      <h1>Jeff Kim</h1>
-
-      <form class="form profile__form">
-        <p class="form__error-message">This is an error message</p>
-        <input type="text" placeholder="Full Name" value="name" />
-        <input type="email" placeholder="Email" value="email" />
+      <form
+        action="/profile/<%= user._id %>/"
+        method="POST"
+        class="profile__form form"
+      >
+        <p class="form__error-message"></p>
+        <input
+          type="text"
+          placeholder="Full Name"
+          name="name"
+          value="<%= user.name %>"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          name="email"
+          value="<%= user.email %>"
+        />
         <input
           type="password"
-          placeholder="Current
-        Password"
-          value="currentPassword"
+          placeholder="Current Password"
+          name="currentPassword"
+          required
         />
-        <input type="password" placeholder="New Password" value="newPassword" />
+        <input
+          type="password"
+          placeholder="New Password"
+          name="newPassword"
+          required
+        />
         <input
           type="password"
           placeholder="Confirm New Password"
-          value="confirmNewPassword"
+          name="confirmNewPassword"
+          required
         />
-        <button type="submit" class="btn primary">Update details</button>
+        <button type="submit" class="btn primary">Update profile</button>
       </form>
     </div>
   </div>

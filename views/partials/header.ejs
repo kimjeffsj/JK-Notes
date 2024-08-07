@@ -4,8 +4,9 @@
   </a>
 
   <ul class="nav__menu">
+    <% if (user) { %>
     <li>
-      <a href="/profile/:userID">Jeff Kim</a>
+      <a href="/profile/<%= user._id %>"><%= user.name %></a>
     </li>
     <li>
       <a href="/notes">Notes List</a>
@@ -16,9 +17,14 @@
     <li>
       <a href="/logout">Logout</a>
     </li>
+    <% } else { %>
+    <li>
+      <a href="/login">Login</a>
+    </li>
+    <% } %>
   </ul>
 
   <button class="nav__toggle-btn" id="navToggle">
-    <i class="fa-solid fa-bars-staggered"></i>
+    <i class="fa-solid fa-bars-staggered nav__open"></i>
   </button>
 </div>

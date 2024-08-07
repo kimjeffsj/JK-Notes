@@ -13,14 +13,20 @@ require("dotenv").config();
 router.use(cookieParser());
 
 // Authentication middleware
-function isAuth(req, res, next) {
+async function isAuth(req, res, next) {
   const accessToken = req.cookies.accessToken;
   if (!accessToken) {
     return res.redirect("/login").json({ message: "Login First please" });
   }
   try {
     const decoded = jwt.verify(accessToken, process.env.SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
     req.user = { _id: decoded.id };
+    res.locals.user = user;
     next();
   } catch (error) {
     res.clearCookie("accessToken");
@@ -41,7 +47,7 @@ router.get("/login", async (req, res) => {
       jwt.verify(accessToken, process.env.SECRET);
       return res.redirect("/home");
     } catch (error) {
-      // Token is invalid, clear it
+      // If Token is invalid, clear it
       res.clearCookie("accessToken");
     }
   }
@@ -147,7 +153,6 @@ router.post("/register", async (req, res) => {
 
     res.status(201).json({ message: `New user ${newUser.email} registered` });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "User registration failed" });
   }
 });
@@ -156,11 +161,10 @@ router.post("/register", async (req, res) => {
 router.get("/notes", isAuth, async (req, res) => {
   try {
     const notes = await Note.find({ creator: req.user._id }).sort({
-      createdAt: -1,
+      updatedAt: -1,
     });
     res.render("notes", { notes, layout: mainLayout });
   } catch (error) {
-    console.error("Error fetching notes:", error);
     res.status(500).render("notes", { message: "Failed to fetch notes" });
   }
 });
@@ -173,18 +177,11 @@ router.get("/notes/:_id", isAuth, async (req, res) => {
       creator: req.user._id,
     });
     if (!note) {
-      return res.status(404).render("error", {
-        message: "Note not found",
-        layout: mainLayout,
-      });
+      return res.status(404).json({ message: "Note not found" });
     }
     res.render("noteDetail", { note, layout: mainLayout });
   } catch (error) {
-    console.error("Error fetching note:", error);
-    res.status(500).render("error", {
-      message: "Error fetching note",
-      layout: mainLayout,
-    });
+    res.status(500).json({ message: "Failed to fetch note" });
   }
 });
 
@@ -197,6 +194,7 @@ router.get("/create", isAuth, (req, res) => {
 router.post("/create", isAuth, async (req, res) => {
   try {
     const { title, content } = req.body;
+
     if (!title || !content) {
       return res.status(400).res.render("createNote", {
         layout: mainLayout,
@@ -210,7 +208,6 @@ router.post("/create", isAuth, async (req, res) => {
     });
     res.redirect("/notes");
   } catch (error) {
-    console.error("Failed to create note:", error);
     res.status(500).res.render("createNote", {
       layout: mainLayout,
       message: "Failed to create note",
@@ -226,6 +223,7 @@ router.get("/notes/:_id/edit", isAuth, async (req, res) => {
       _id: req.params._id,
       creator: req.user._id,
     });
+
     if (!note) {
       return res.status(404).render("editNote", {
         layout: mainLayout,
@@ -235,7 +233,6 @@ router.get("/notes/:_id/edit", isAuth, async (req, res) => {
 
     res.render("editNote", { layout: mainLayout, note: note });
   } catch (error) {
-    console.error("Error fetching note:", error);
     res.status(500).render("editNote", {
       layout: mainLayout,
       message: "Failed to fetch note",
@@ -265,7 +262,6 @@ router.post("/notes/:id/edit", isAuth, async (req, res) => {
 
     res.redirect("/notes/" + id);
   } catch (error) {
-    console.error("Error updating note:", error);
     res.status(500).render("editNote", {
       layout: mainLayout,
       message: "Failed to update note",
@@ -273,16 +269,97 @@ router.post("/notes/:id/edit", isAuth, async (req, res) => {
   }
 });
 
+// DELETE NOTE
+// DELETE /notes/:_id
+router.delete("/notes/:_id", isAuth, async (req, res) => {
+  try {
+    const { _id } = req.params;
+    const deletedNote = await Note.findOneAndDelete({
+      _id: _id,
+      creator: req.user._id,
+    });
+
+    if (!deletedNote) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.status(200).json({ message: "Note deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to delete note" });
+  }
+});
+
 // GET PROFILE PAGE
 router.get("/profile/:_id", isAuth, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params._id);
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     res.render("profile", { user, layout: mainLayout });
   } catch (error) {
-    res.status(500).json({ message: "Error fetching user" });
+    res.status(500).json({ message: "Failed to fetch user" });
+  }
+});
+
+// UPDATE PROFILE
+router.post("/profile/:_id", isAuth, async (req, res) => {
+  try {
+    const { name, email, currentPassword, newPassword, confirmNewPassword } =
+      req.body;
+    const userId = req.params._id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Current Password is invalid" });
+    }
+
+    // Name update
+    if (name && name !== user.name) {
+      user.name = name;
+    }
+
+    // Email update
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email: email.toLowerCase() });
+
+      if (emailExists) {
+        return res.status(409).json({
+          message: "Email is already in use. Please choose a different one.",
+        });
+      }
+      user.email = email.toLowerCase();
+    }
+
+    // New password update
+    if (newPassword) {
+      if (newPassword.trim().length < 6) {
+        return res
+          .status(422)
+          .json({ message: "Password must be at least 6 characters" });
+      }
+      if (newPassword !== confirmNewPassword) {
+        return res.status(422).json({ message: "Passwords do not match" });
+      }
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    // Save updated user
+    await user.save();
+
+    res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update user profile",
+      error: error.message,
+    });
   }
 });
 

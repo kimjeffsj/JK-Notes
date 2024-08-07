@@ -1,16 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Error message handling
-  function showError(errorElement, message) {
-    if (errorElement) {
-      errorElement.textContent = message;
-      errorElement.style.display = "block";
-    }
-  }
+  // Navbar
+  const navMenu = document.querySelector(".nav__menu");
+  const navToggle = document.querySelector(".nav__toggle-btn");
+  const navOpen = document.querySelector(".nav__open");
 
-  function clearError(errorElement) {
-    if (errorElement) {
-      errorElement.style.display = "none";
-    }
+  if (navToggle) {
+    navToggle.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+      navOpen.classList.toggle("flex");
+    });
   }
 
   // Login form handling
@@ -32,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify(userData),
         });
+
         if (response.ok) {
           window.location.href = "/home";
         } else {
@@ -46,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Clear error message when user starts typing in any input field
+    // Clear error message
     loginForm.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", () => clearError(errorMessage));
     });
@@ -82,9 +81,111 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Clear error message when user starts typing in any input field
+    // Clear error message
     registerForm.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", () => clearError(errorMessage));
     });
   }
+
+  // PROFILE CHANGE HANDLING
+  const profileForm = document.querySelector(".profile__form");
+  if (profileForm) {
+    const errorMessage = profileForm.querySelector(".form__error-message");
+
+    profileForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(profileForm);
+      const userData = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch(profileForm.action, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+          credentials: "include",
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert(data.message || "Profile updated successfully");
+          window.location.reload();
+        } else {
+          showError(
+            errorMessage,
+            data.message || "Failed to update user profile"
+          );
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        showError(
+          errorMessage,
+          "Error updating user profile. Please try again."
+        );
+      }
+    });
+    // Clear error message
+    profileForm.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", () => clearError(errorMessage));
+    });
+  }
+
+  // Delete note confirmation
+  const deleteForm = document.querySelector(".note-detail__alert");
+  const deletePopup = document.querySelector(".deletePopup");
+  const cancelBtn = document.querySelector(".cancelBtn");
+
+  deletePopup.addEventListener("click", (e) => {
+    e.preventDefault();
+    deleteForm.style.display = "flex";
+  });
+
+  deleteForm.addEventListener("click", (e) => {
+    if (e.target === deleteForm) {
+      deleteForm.style.display = "none";
+    }
+  });
+
+  cancelBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    deleteForm.style.display = "none";
+  });
+
+  // DELETE NOTE HANDLING
+  const deleteBtn = document.querySelector(".deleteBtn");
+
+  deleteBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const noteId = window.location.pathname.split("/").pop();
+    try {
+      const response = await fetch(`/notes/${noteId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        window.location.href = "/notes";
+      } else {
+        const data = await response.json();
+        alert(data.message || "An error occurred. Please try again.");
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+  });
 });
+
+// Error message handling
+function showError(errorElement, message) {
+  if (errorElement) {
+    errorElement.textContent = message;
+    errorElement.style.display = "block";
+  }
+}
+
+function clearError(errorElement) {
+  if (errorElement) {
+    errorElement.style.display = "none";
+  }
+}
