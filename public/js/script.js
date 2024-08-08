@@ -2,14 +2,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Navbar
   const navMenu = document.querySelector(".nav__menu");
   const navToggle = document.querySelector(".nav__toggle-btn");
-  const navOpen = document.querySelector(".nav__open");
+  const navToggleIcon = document.querySelector(".nav__toggle-btn i");
 
-  if (navToggle) {
-    navToggle.addEventListener("click", () => {
-      navMenu.classList.toggle("active");
-      navOpen.classList.toggle("flex");
-    });
-  }
+  navToggle.onclick = () => {
+    navMenu.classList.toggle("active");
+    const isMenuOpen = navMenu.classList.contains("active");
+
+    navToggleIcon.classList = isMenuOpen
+      ? "fa-solid fa-xmark"
+      : "fa-solid fa-bars-staggered";
+  };
 
   // Login form handling
   const loginForm = document.querySelector(".login__form");

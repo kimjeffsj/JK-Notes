@@ -178,6 +178,15 @@ nav {
   display: none;
 }
 
+.nav__open {
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.nav__close {
+  display: none;
+}
+
 /* FOOTER */
 footer {
   background: var(--primary-color-2);
@@ -408,8 +417,26 @@ textarea {
   width: var(--form-width);
 }
 
+/* Error Page */
+.error__container {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  height: calc(100vh - 12rem);
+}
+
+.error__container h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.error__container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
 /* MEDIA QUERIES */
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 768px) {
   h1 {
     font-size: 1.5rem;
   }
@@ -516,5 +543,15 @@ textarea {
   .form.profile__form {
     margin-top: 2.5rem;
     width: 80%;
+  }
+
+  .error__container h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .error__container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
 }
