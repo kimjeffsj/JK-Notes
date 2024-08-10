@@ -5,7 +5,7 @@ JK Notes is a simple note-taking application built with Node.js, Express, and Mo
 ## Features
 
 - User authentication (register, login, logout)
-- Create, read, update, and delete notes
+- Create, read, update, and delete notes (CRUD)
 
 ## Prerequisites
 
@@ -35,7 +35,7 @@ Before you begin, ensure you have these installed:
 
 ## Configuration
 
-Make sure to a `.env` file in the root directory of the project and add the following environment variables:
+Make sure make a `.env` file in the root directory of the project and add the following environment variables:
 
 ```
 MONGO_URI=mongodb://localhost:27017/your-database-name
@@ -65,7 +65,7 @@ The application will be available at `http://localhost:4000` (or the port you sp
 - `GET /home`: User home page (authenticated)
 - `GET /notes`: Get all notes (authenticated)
 - `GET /notes/:id`: Get a specific note (authenticated)
-- `GET /create`: Create note page (authenticated)
+- `GET /create`: Create a note page (authenticated)
 - `POST /create`: Create a new note (authenticated)
 - `GET /notes/:id/edit`: Edit note page (authenticated)
 - `POST /notes/:id/edit`: Update a note (authenticated)
