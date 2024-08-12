@@ -64,14 +64,14 @@ The application will be available at `http://localhost:4000` (or the port you sp
 - `POST /register`: Register new user
 - `GET /home`: User home page (authenticated)
 - `GET /notes`: Get all notes (authenticated)
-- `GET /notes/:id`: Get a specific note (authenticated)
+- `GET /notes/:_id`: Get a specific note (authenticated)
 - `GET /create`: Create a note page (authenticated)
 - `POST /create`: Create a new note (authenticated)
-- `GET /notes/:id/edit`: Edit note page (authenticated)
-- `POST /notes/:id/edit`: Update a note (authenticated)
-- `DELETE /notes/:id`: Delete a note (authenticated)
-- `GET /profile/:id`: User profile page (authenticated)
-- `POST /profile/:id`: Update user profile (authenticated)
+- `GET /notes/:_id/edit`: Edit note page (authenticated)
+- `POST /notes/:_id/edit`: Update a note (authenticated)
+- `DELETE /notes/:_id`: Delete a note (authenticated)
+- `GET /profile/:_id`: User profile page (authenticated)
+- `POST /profile/:_id`: Update user profile (authenticated)
 - `GET /logout`: Logout
 
 ## API Documentation
