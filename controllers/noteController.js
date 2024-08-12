@@ -8,9 +8,14 @@ const getAllNotes = async (req, res) => {
     const notes = await Note.find({ creator: req.user._id }).sort({
       updatedAt: -1,
     });
-    res.render("notes", { notes, layout: mainLayout });
+    res.status(200).render("notes", { notes, layout: mainLayout });
+    // .json({ message: "Notes fetched successfully", notes });
   } catch (error) {
-    res.status(500).render("notes", { message: "Failed to fetch notes" });
+    res.status(500).render("notes", {
+      notes: [],
+      layout: mainLayout,
+      message: "Failed to fetch notes",
+    });
   }
 };
 
@@ -25,7 +30,8 @@ const getNote = async (req, res) => {
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
-    res.render("noteDetail", { note, layout: mainLayout });
+    res.status(200).render("noteDetail", { note, layout: mainLayout });
+    // .json({ message: "Note fetched successfully", note });
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch note" });
   }
@@ -42,9 +48,10 @@ const getCreateNote = (req, res) => {
 const createNote = async (req, res) => {
   try {
     const { title, content } = req.body;
+    console.log(req.body);
 
     if (!title || !content) {
-      return res.status(400).res.render("createNote", {
+      return res.status(400).render("createNote", {
         layout: mainLayout,
         error: "Please fill in all fields",
       });
@@ -54,9 +61,10 @@ const createNote = async (req, res) => {
       content,
       creator: req.user._id,
     });
-    res.redirect("/notes");
+    res.status(201).redirect("/notes");
+    // .json({ message: "Note successfully created", newNote });
   } catch (error) {
-    res.status(500).res.render("createNote", {
+    res.status(500).render("createNote", {
       layout: mainLayout,
       message: "Failed to create note",
     });
@@ -92,11 +100,11 @@ const getEditNote = async (req, res) => {
 // POST /notes/:_id/edit
 const editNote = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { _id } = req.params;
     const { title, content } = req.body;
 
     const updatedNote = await Note.findOneAndUpdate(
-      { _id: id, creator: req.user._id },
+      { _id: _id, creator: req.user._id },
       { title, content, updatedAt: new Date() },
       { new: true, runValidators: true }
     );
@@ -108,7 +116,9 @@ const editNote = async (req, res) => {
       });
     }
 
-    res.redirect("/notes/" + id);
+    res
+      // .json({ message: "Note updated successfully", updatedNote })
+      .redirect("/notes/" + _id);
   } catch (error) {
     res.status(500).render("editNote", {
       layout: mainLayout,

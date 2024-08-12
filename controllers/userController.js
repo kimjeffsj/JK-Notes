@@ -3,6 +3,65 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mainLayout = "../views/layouts/main.ejs";
 
+// Register page
+// GET /register
+const getRegister = (req, res) => {
+  const accessToken = req.cookies.accessToken;
+  if (accessToken) {
+    try {
+      jwt.verify(accessToken, process.env.SECRET);
+      return res.redirect("/home");
+    } catch (error) {
+      res.clearCookie("accessToken");
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+  }
+  res.render("register", { layout: mainLayout });
+};
+
+// Register user
+// POST /register
+const registerUser = async (req, res) => {
+  try {
+    const { name, email, password, password2 } = req.body;
+
+    if (!name || !email || !password || !password2) {
+      return res.status(422).json({ message: "Fill in required fields" });
+    }
+
+    const newEmail = email.toLowerCase();
+    const emailExists = await User.findOne({ email: newEmail });
+
+    if (emailExists) {
+      return res
+        .status(409)
+        .json({ message: "Email already exists, choose other email please" });
+    }
+
+    if (password.trim().length < 6) {
+      return res
+        .status(422)
+        .json({ message: "Password should be at least 6 characters" });
+    }
+
+    if (password !== password2) {
+      return res.status(422).json({ message: "Passwords do not match" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      name,
+      email: newEmail,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({ message: `New user ${newUser.email} registered` });
+  } catch (error) {
+    res.status(500).json({ message: "User registration failed" });
+  }
+};
+
 // Login page
 // GET /login
 const login = async (req, res) => {
@@ -12,7 +71,7 @@ const login = async (req, res) => {
       jwt.verify(accessToken, process.env.SECRET);
       return res.redirect("/home");
     } catch (error) {
-      // If Token is invalid, clear it
+      // If Token is invalid, clear the cookie
       res.clearCookie("accessToken");
     }
   }
@@ -47,68 +106,12 @@ const loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.cookie("accessToken", accessToken, { httpOnly: true, secure: true });
-    return res.status(200).json({ message: "Login successful" });
+    res.cookie("accessToken", accessToken, { httpOnly: true });
+    return res
+      .status(200)
+      .json({ message: "Login successful", email, accessToken });
   } catch (error) {
     return res.status(500).json({ message: error.message });
-  }
-};
-
-// Register page
-// GET /register
-const getRegister = (req, res) => {
-  const accessToken = req.cookies.accessToken;
-  if (accessToken) {
-    try {
-      jwt.verify(accessToken, process.env.SECRET);
-      return res.redirect("/home");
-    } catch (error) {
-      res.clearCookie("accessToken");
-    }
-  }
-  res.render("register", { layout: mainLayout });
-};
-
-// Register user
-// POST /register
-const registerUser = async (req, res) => {
-  try {
-    const { name, email, password, password2 } = req.body;
-
-    if (!name || !email || !password) {
-      return res.status(422).json({ message: "Fill in required fields" });
-    }
-
-    const newEmail = email.toLowerCase();
-    const emailExists = await User.findOne({ email: newEmail });
-
-    if (emailExists) {
-      return res
-        .status(409)
-        .json({ message: "Email already exists, choose other email please" });
-    }
-
-    if (password.trim().length < 6) {
-      return res
-        .status(422)
-        .json({ message: "Password should be at least 6 characters" });
-    }
-
-    if (password !== password2) {
-      return res.status(422).json({ message: "Passwords do not match" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      name,
-      email: newEmail,
-      password: hashedPassword,
-    });
-
-    res.status(201).json({ message: `New user ${newUser.email} registered` });
-  } catch (error) {
-    res.status(500).json({ message: "User registration failed" });
   }
 };
 

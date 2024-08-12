@@ -73,3 +73,204 @@ The application will be available at `http://localhost:4000` (or the port you sp
 - `GET /profile/:id`: User profile page (authenticated)
 - `POST /profile/:id`: Update user profile (authenticated)
 - `GET /logout`: Logout
+
+## API Documentation
+
+Requests and responses in JSON format.
+
+### Authentication Endpoints
+
+- **POST** `/register`
+- **Request Body**:
+
+```json
+{
+  "name": "John Doe",
+  "email": "John@example.com",
+  "password": "123456",
+  "password2": "123456"
+}
+```
+
+- **Response**:
+
+```json
+{
+  "message": "New user john@example.com registered"
+}
+```
+
+- **POST** `/login`
+- **Request Body**:
+
+```json
+{
+  "email": "John@example.com",
+  "password": "123456"
+}
+```
+
+- **Response**:
+
+```json
+{
+  "message": "Login successful",
+  "email": "John@example.com",
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YjgyNTg5ZjhlNzk2MzUwN2U3OTEzMCIsImlhdCI6MTcyMzM0NDU3NCwiZXhwIjoxNzIzMzQ4MTc0fQ.ILWcbQXkbQ5uzJKL3LNVhAx90Q4cRkfn20YvPAckJXE"
+}
+```
+
+### Endpoints
+
+All notes endpoints require authentication. JWT tokens are used for authentication.
+
+```
+Authorization: Bearer <accessToken>
+```
+
+#### Create a Note
+
+required to un comment json message in noteController.js to see response in json format. Otherwise will be rendered as html
+
+- **POST** `/create`
+- **Request Body**
+
+```json
+{
+  "title": "My First Note",
+  "content": "This is content of my first note"
+}
+```
+
+- **Response**:
+
+```json
+{
+  "message": "Note successfully created",
+  "newNote": {
+    "title": "My First Note",
+    "content": "This is content of my first note",
+    "creator": "66b120a2b551b9f273499c51",
+    "_id": "66b946e2c6af7254914782aa",
+    "createdAt": "2024-08-11T23:18:58.959Z",
+    "updatedAt": "2024-08-11T23:18:58.959Z",
+    "__v": 0
+  }
+}
+```
+
+#### Get all Notes
+
+required to un comment json message in noteController.js to see response in json format. Otherwise will be rendered as html
+
+- **GET** `/notes`
+
+```json
+{
+  "message": "Notes fetched successfully",
+  "notes": {
+    "_id": "66b946e2c6af7254914782aa",
+    "title": "My First Note",
+    "content": "This is content of my first note",
+    "creator": "66b120a2b551b9f273499c51",
+    "createdAt": "2024-08-11T23:18:58.959Z",
+    "updatedAt": "2024-08-11T23:18:58.959Z",
+    "__v": 0
+  }
+}
+```
+
+#### Get a Note
+
+required to un comment json message in noteController.js to see response in json format. Otherwise will be rendered as html
+
+- **GET** `/notes/:_id`
+
+```json
+{
+  "message": "Note fetched successfully",
+  "note": {
+    "_id": "66b946e2c6af7254914782aa",
+    "title": "My First Note",
+    "content": "This is content of my first note",
+    "creator": "66b120a2b551b9f273499c51",
+    "createdAt": "2024-08-11T23:18:58.959Z",
+    "updatedAt": "2024-08-11T23:18:58.959Z",
+    "__v": 0
+  }
+}
+```
+
+#### Edit a note
+
+required to un comment json message in noteController.js to see response in json format. Otherwise will be rendered as html
+
+- **POST** `/notes/:_id/edit`
+
+- **Request Body**:
+
+```json
+{
+  "title": "My Amended Note",
+  "content": "This is amendedcontent of my Amended note"
+}
+```
+
+- **Response**:
+
+```json
+{
+  "message": "Note updated successfully",
+  "updatedNote": {
+    "_id": "66b946e2c6af7254914782aa",
+    "title": "My Amended Note",
+    "content": "This is amendedcontent of my Amended note",
+    "creator": "66b120a2b551b9f273499c51",
+    "createdAt": "2024-08-11T23:18:58.959Z",
+    "updatedAt": "2024-08-11T23:18:58.959Z",
+    "__v": 0
+  }
+}
+```
+
+#### Delete a Note
+
+-**DELETE** `/notes/:_id`
+
+```json
+{
+  "message": "Note deleted successfully"
+}
+```
+
+#### Update User Profile
+
+-**POST** `/profile/:_id`
+
+-**Request Body**:
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "Jane@example.com",
+  "currentPassword": "123456",
+  "newPassword": "654321",
+  "confirmNewPassword": "654321"
+}
+```
+
+-**Response**:
+
+```json
+{
+  "message": "Profile updated successfully"
+}
+```
+
+## Details
+
+1. **Authentication**: This app uses JWT for authentication. Tokens are valid for 1hour.
+2. **Data Validation**:
+
+- User email must be unique
+- Password must be at least 6 characters

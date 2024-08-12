@@ -47,7 +47,7 @@ router.get("/create", isAuth, getCreateNote);
 router.post("/create", isAuth, createNote);
 
 router.get("/notes/:_id/edit", isAuth, getEditNote);
-router.post("/notes/:id/edit", isAuth, editNote);
+router.post("/notes/:_id/edit", isAuth, editNote);
 
 router.delete("/notes/:_id", isAuth, deleteNote);
 
