@@ -40,7 +40,6 @@ router.post("/register", registerUser);
 router.get("/home", isAuth, home);
 
 router.get("/notes", isAuth, getAllNotes);
-
 router.get("/notes/:_id", isAuth, getNote);
 
 router.get("/create", isAuth, getCreateNote);

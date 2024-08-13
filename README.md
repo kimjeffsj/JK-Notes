@@ -274,3 +274,59 @@ required to un comment json message in noteController.js to see response in json
 
 - User email must be unique
 - Password must be at least 6 characters
+
+## Difficulties and challenges during development
+
+At start of the project, I thought it would be not too hard to work on. However, as I was working on, I faced several challenges from the beginning:
+
+#### 1. Fetching data from database
+
+#### 2. Authentication and Authorization
+
+Implementing user authentication and authorization were more complex than I thought. Ones I was working on:
+
+- Choosing authentication and authorization method(session-based or token-based)
+- Securing routes
+- Securely storing credentials
+
+#### 3. optimizing code
+
+As the project gets more complex, I realized the need for better code organization and optimization. Which I was working on:
+
+- Structuring code for maintainability
+- Reducing repetitive code, enhancing readability, and reusability
+
+#### 4. Facing errors
+
+I believe this was the worst nightmare I had during this project.
+The main difficulties were:
+
+- Frequently facing unexpected error
+- Time consuming to identify and fix the error
+- Needed to constantly research for the solution and seek for help from various sources
+
+How I handled errors:
+
+- Extensively used Google and StackOverflow to search for similar error messages and potential solutions
+- Leverage ChatGPT for quick explanations of the objects and their usages in the code
+
+While this process was often frustrated and time consuming, however, it significantly improved my problem solving skills. I also learned the importance of the error messages to identify the root cause of the problem.
+
+#### 5. Connecting frontend and backend
+
+Connecting frontend and backend were such a challenging experience. Even the I spent most of the time on this, it gave me insights into full stack development. The challenges were:
+
+- Ensuring data between between client and server
+- Dealing with fronted details, which leads me lots of errors and confusions
+
+With those challenges I was able to learn:
+
+- The importance of frontend and backend integration from the project's start
+- The need of clear API design and documentation
+- The value of error handling and testing
+
+## Conclusion
+
+Despite the fact that, the project was very challenging and time consuming, I believe I was able to enhance my understanding of full stack development. Especially, the difficulties encountered throughout the process, from authentication complexity to code optimization and connecting frontend, were great chance to enhance my basic skills to the next level.
+
+Moving forward, I feel better working on other projects and armed with understanding of the development and challenges I will face in the future.
